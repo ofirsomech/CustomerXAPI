@@ -2,8 +2,8 @@
 {
     public enum eSubscriptionType
     {
-        Basic,
-        Premium,
-        Enterprise
+        Weekly,
+        Monthly,
+        Yearly
     }
 }

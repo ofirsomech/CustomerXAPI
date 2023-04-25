@@ -8,5 +8,6 @@ public static class ServiceConfiguration
     {
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IContractService, ContractService>();
+        services.AddScoped<IPackageService, PackageService>();
     }
 }

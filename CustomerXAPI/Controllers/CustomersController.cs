@@ -1,12 +1,16 @@
-﻿using CustomerXAPI.Dtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using CustomerXAPI.Dtos;
 using CustomerXAPI.Interfaces;
-using Microsoft.AspNetCore.Http;
+using CustomerXAPI.Services;
+using CustomerXAPI.Utilis;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerXAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/customers")]
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _customerService;
@@ -16,11 +20,16 @@ namespace CustomerXAPI.Controllers
             _customerService = customerService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerReadDto>> GetCustomerAsync(string id)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllCustomers()
         {
-            var customer = await _customerService.GetCustomerAsync(id);
+            return Ok(await _customerService.GetAllCustomersAsync());
+        }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CustomerReadDto>> GetCustomerById(int id)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(id);
             if (customer == null)
             {
                 return NotFound();
@@ -29,41 +38,65 @@ namespace CustomerXAPI.Controllers
             return Ok(customer);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerReadDto>>> GetAllCustomersAsync()
+        // GET api/customers/identity/{identityNumber}
+        [HttpGet("identity/{identityNumber}")]
+        public async Task<ActionResult> GetCustomerByIdentityNumberAsync(string identityNumber)
         {
-            var customers = await _customerService.GetAllCustomersAsync();
+            bool isValidID = IdUtils.IsValidIsraeliID(identityNumber);
 
-            return Ok(customers);
+            if (!isValidID)
+            {
+                return BadRequest("Invalid Israeli ID number");
+            }
+
+            var customer = await _customerService.GetCustomerByIdentityNumberAsync(identityNumber);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return Ok(customer);
+        }
+
+        // PUT api/customers/{id}/address
+        [HttpPut("address/{id}")]
+        public async Task<IActionResult> UpdateCustomerAddressAsync(int id, [FromBody] UpdateAddressDto addressUpdateDto)
+        {
+            var updatedCustomer = await _customerService.UpdateCustomerAddressAsync(id, addressUpdateDto);
+
+            if (updatedCustomer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedCustomer);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerReadDto>> CreateCustomerAsync(CustomerCreateDto customerCreateDto)
+        public async Task<ActionResult<CustomerReadDto>> CreateCustomer(CustomerCreateDto customerCreateDto)
         {
             var customer = await _customerService.CreateCustomerAsync(customerCreateDto);
-
-            return CreatedAtAction(nameof(GetCustomerAsync), new { id = customer.ID }, customer);
+            return CreatedAtAction(nameof(GetCustomerById), new { id = customer.ID }, customer);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CustomerReadDto>> UpdateCustomerAsync(string id, CustomerUpdateDto customerUpdateDto)
+        public async Task<IActionResult> UpdateCustomer(int id, CustomerUpdateDto customerUpdateDto)
         {
-            var customer = await _customerService.UpdateCustomerAsync(id, customerUpdateDto);
+            var success = await _customerService.UpdateCustomerAsync(id, customerUpdateDto);
 
-            if (customer == null)
+            if (!success)
             {
                 return NotFound();
             }
 
-            return Ok(customer);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCustomerAsync(string id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var deleted = await _customerService.DeleteCustomerAsync(id);
+            var success = await _customerService.DeleteCustomerAsync(id);
 
-            if (!deleted)
+            if (!success)
             {
                 return NotFound();
             }
@@ -72,3 +105,4 @@ namespace CustomerXAPI.Controllers
         }
     }
 }
+

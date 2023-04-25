@@ -4,6 +4,7 @@
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string IdentityNumber { get; set; }
         public string AddressCity { get; set; }
         public string AddressStreet { get; set; }
         public string AddressHouseNumber { get; set; }
@@ -15,6 +16,7 @@
         public string ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string IdentityNumber { get; set; }
         public string AddressCity { get; set; }
         public string AddressStreet { get; set; }
         public string AddressHouseNumber { get; set; }
@@ -26,9 +28,11 @@
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string IdentityNumber { get; set; }
         public string AddressCity { get; set; }
         public string AddressStreet { get; set; }
         public string AddressHouseNumber { get; set; }
         public string PostalCode { get; set; }
     }
+
 }

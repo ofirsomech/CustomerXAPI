@@ -4,6 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IPI_server.Data
 {
+using AutoMapper.Execution;
+using CustomerXAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace IPI_server.Data
+{
     public class CustomerXContext : DbContext
     {
         public DbSet<Customer> Customers { get; set; }
@@ -14,4 +20,6 @@ namespace IPI_server.Data
         {
         }
     }
+}
+
 }

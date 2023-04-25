@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using CustomerXAPI.Dtos;
+﻿using CustomerXAPI.Dtos;
 using CustomerXAPI.Interfaces;
-using Microsoft.AspNetCore.Http;
+using CustomerXAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CustomerXAPI.Controllers
 {
@@ -11,19 +11,23 @@ namespace CustomerXAPI.Controllers
     public class ContractsController : ControllerBase
     {
         private readonly IContractService _contractService;
-        private readonly IMapper _mapper;
 
-        public ContractsController(IContractService contractService, IMapper mapper)
+        public ContractsController(IContractService contractService)
         {
             _contractService = contractService;
-            _mapper = mapper;
         }
 
-        // GET: api/Contracts/{subscriptionNumber}
-        [HttpGet("{subscriptionNumber}")]
-        public async Task<ActionResult<ContractReadDto>> GetContract(string subscriptionNumber)
+        [HttpGet]
+        public async Task<IActionResult> GetAllContracts()
         {
-            var contract = await _contractService.GetContractAsync(subscriptionNumber);
+            var contracts = await _contractService.GetAllContractsAsync();
+            return Ok(contracts);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetContractById(int id)
+        {
+            var contract = await _contractService.GetContractByIdAsync(id);
+
             if (contract == null)
             {
                 return NotFound();
@@ -32,30 +36,19 @@ namespace CustomerXAPI.Controllers
             return Ok(contract);
         }
 
-        // GET: api/Contracts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ContractReadDto>>> GetAllContracts()
-        {
-            var contracts = await _contractService.GetAllContractsAsync();
-            return Ok(contracts);
-        }
-
-        // POST: api/Contracts
         [HttpPost]
-        public async Task<ActionResult<ContractReadDto>> CreateContract(ContractCreateDto contractCreateDto)
+        public async Task<IActionResult> CreateContract(ContractCreateDto contractCreateDto)
         {
             var contract = await _contractService.CreateContractAsync(contractCreateDto);
-
-            return CreatedAtAction(nameof(GetContract), new { subscriptionNumber = contract.SubscriptionNumber }, contract);
+            return CreatedAtAction(nameof(GetContractById), new { id = contract.ID }, contract);
         }
 
-        // PUT: api/Contracts/{subscriptionNumber}
-        [HttpPut("{subscriptionNumber}")]
-        public async Task<IActionResult> UpdateContract(string subscriptionNumber, ContractUpdateDto contractUpdateDto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateContract(int id, ContractUpdateDto contractUpdateDto)
         {
-            var updatedContract = await _contractService.UpdateContractAsync(subscriptionNumber, contractUpdateDto);
+            var result = await _contractService.UpdateContractAsync(id, contractUpdateDto);
 
-            if (updatedContract == null)
+            if (!result)
             {
                 return NotFound();
             }
@@ -63,13 +56,12 @@ namespace CustomerXAPI.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Contracts/{subscriptionNumber}
-        [HttpDelete("{subscriptionNumber}")]
-        public async Task<IActionResult> DeleteContract(string subscriptionNumber)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteContract(int id)
         {
-            var success = await _contractService.DeleteContractAsync(subscriptionNumber);
+            var result = await _contractService.DeleteContractAsync(id);
 
-            if (!success)
+            if (!result)
             {
                 return NotFound();
             }

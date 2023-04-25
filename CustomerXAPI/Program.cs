@@ -1,7 +1,10 @@
 using IPI_server.Data;
+using IPI_server.Data.IPI_server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using CustomerXAPI.Data.Seeders; // Add this line to import the namespace containing the CustomerSeeder class
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +18,10 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddDbContext<CustomerXContext>(
         options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -65,16 +71,27 @@ else
     app.UseHttpsRedirection();
 }
 
-using (var scope =
-  app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 using (var context = scope.ServiceProvider.GetService<CustomerXContext>())
+{
     context.Database.Migrate();
+
+    // Add this block to seed the database
+    try
+    {
+        var seeder = new CustomerSeeder();
+        await seeder.SeedAsync(context);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
+    }
+}
 
 app.UseAuthorization();
 
 app.UseAuthentication();
 
 app.MapControllers();
-
 
 app.Run();

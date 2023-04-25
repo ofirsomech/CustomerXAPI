@@ -9,6 +9,10 @@ namespace CustomerXAPI.Models
         public int ID { get; set; }
 
         [Required]
+        public int ContractID { get; set; }
+        public virtual Contract Contract { get; set; }
+
+        [Required]
         public ePackageType PackageType { get; set; }
 
         [Required]
@@ -17,10 +21,7 @@ namespace CustomerXAPI.Models
         [Required]
         public int Amount { get; set; }
 
-        public int Survivor { get; set; }
+        public int Used { get; set; }
 
-        public int ContractSubscriptionNumber { get; set; }
-
-        public virtual Contract Contract { get; set; }
     }
 }

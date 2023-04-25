@@ -1,4 +1,5 @@
 ﻿using CustomerXAPI.Enums;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace CustomerXAPI.Models
@@ -6,7 +7,10 @@ namespace CustomerXAPI.Models
     public class Contract
     {
         [Key]
-        public string ID { get; set; }
+        public int ID { get; set; }
+        [Required]
+        public int CustomerID { get; set; }
+        public virtual Customer Customer { get; set; }
         [Required]
         public string SubscriptionNumber { get; set; }
 
@@ -17,9 +21,5 @@ namespace CustomerXAPI.Models
         public eSubscriptionType SubscriptionType { get; set; }
 
         public virtual ICollection<Package> Packages { get; set; }
-
-        public string CustomerID { get; set; }
-
-        public virtual Customer Customer { get; set; }
     }
 }

@@ -8,13 +8,17 @@ namespace CustomerXAPI.Models
     {
 
         [Key]
-        public string ID { get; set; }
+        public int ID { get; set; }
 
         [Required]
         public string FirstName { get; set; }
 
         [Required]
         public string LastName { get; set; }
+
+        [Required]
+        public string IdentityNumber { get; set; }
+
 
         public string AddressCity { get; set; }
 

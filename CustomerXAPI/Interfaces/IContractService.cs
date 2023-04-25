@@ -4,10 +4,10 @@ namespace CustomerXAPI.Interfaces
 {
     public interface IContractService
     {
-        Task<ContractReadDto> GetContractAsync(string subscriptionNumber);
         Task<IEnumerable<ContractReadDto>> GetAllContractsAsync();
+        Task<ContractReadDto> GetContractByIdAsync(int id);
         Task<ContractReadDto> CreateContractAsync(ContractCreateDto contractCreateDto);
-        Task<ContractReadDto> UpdateContractAsync(string subscriptionNumber, ContractUpdateDto contractUpdateDto);
-        Task<bool> DeleteContractAsync(string subscriptionNumber);
+        Task<bool> UpdateContractAsync(int id, ContractUpdateDto contractUpdateDto);
+        Task<bool> DeleteContractAsync(int id);
     }
 }

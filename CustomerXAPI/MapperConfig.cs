@@ -13,7 +13,8 @@ public class MapperConfig
             mc.CreateMap<CustomerCreateDto, Customer>();
             mc.CreateMap<CustomerUpdateDto, Customer>();
             // Contract
-            mc.CreateMap<Contract, ContractReadDto>();
+            mc.CreateMap<Contract, ContractReadDto>()
+                  .ForMember(dest => dest.Packages, opt => opt.MapFrom(src => src.Packages));
             mc.CreateMap<ContractCreateDto, Contract>();
             mc.CreateMap<ContractUpdateDto, Contract>();
             // Package
