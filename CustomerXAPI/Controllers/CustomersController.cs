@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using CustomerXAPI.Dtos;
 using CustomerXAPI.Interfaces;
 using CustomerXAPI.Services;
-using CustomerXAPI.Utilis;
+using IsraeliHebrewNames;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerXAPI.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/customers")]
     public class CustomersController : ControllerBase
     {
@@ -42,7 +44,7 @@ namespace CustomerXAPI.Controllers
         [HttpGet("identity/{identityNumber}")]
         public async Task<ActionResult> GetCustomerByIdentityNumberAsync(string identityNumber)
         {
-            bool isValidID = IdUtils.IsValidIsraeliID(identityNumber);
+            bool isValidID = IsraeliDataGenerator.IsValidIsraeliID(identityNumber);
 
             if (!isValidID)
             {
@@ -52,7 +54,7 @@ namespace CustomerXAPI.Controllers
             var customer = await _customerService.GetCustomerByIdentityNumberAsync(identityNumber);
             if (customer == null)
             {
-                return NotFound();
+                return NotFound("לא נמצא לקוח עם תעודת זהות זאת.");
             }
             return Ok(customer);
         }

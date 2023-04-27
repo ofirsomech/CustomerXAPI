@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerX API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GitHubSearchAPI", Version = "v1" });
 
     // Add authentication to Swagger
     var securityScheme = new OpenApiSecurityScheme
@@ -47,7 +48,6 @@ builder.Services.AddSwaggerGen(c =>
                 };
     c.AddSecurityRequirement(securityRequirement);
 });
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
@@ -62,6 +62,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
 
 ServiceConfiguration.Configure(builder.Services);
 
@@ -106,9 +107,9 @@ using (var context = scope.ServiceProvider.GetService<CustomerXContext>())
     }
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
 
 app.MapControllers();
 

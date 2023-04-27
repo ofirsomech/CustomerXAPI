@@ -10,13 +10,13 @@ namespace GitHubSearchAPI.Services
     {
         private readonly string _secretKey;
         private readonly string _issuer;
-        private readonly int _expirationInYears;
+        private readonly double _expirationInMinutes;
 
         public JwtService(IConfiguration configuration)
         {
             _secretKey = configuration["Jwt:Key"];
             _issuer = configuration["Jwt:Issuer"];
-            _expirationInYears = 1;
+            _expirationInMinutes = 5;
         }
 
         public string GenerateToken(string username)
@@ -29,9 +29,9 @@ namespace GitHubSearchAPI.Services
                 Audience = _issuer,
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username)
                 }),
-                Expires = DateTime.UtcNow.AddYears(_expirationInYears),
+                Expires = DateTime.UtcNow.AddMinutes(_expirationInMinutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
