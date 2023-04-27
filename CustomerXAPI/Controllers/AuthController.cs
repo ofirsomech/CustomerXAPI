@@ -1,10 +1,9 @@
-﻿using GitHubSearchAPI.Dtos;
-using GitHubSearchAPI.Interfaces;
-using GitHubSearchAPI.Services;
+﻿using CustomerXAPI.Dtos;
+using CustomerXAPI.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GitHubSearchAPI.Controllers
+namespace CustomerXAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

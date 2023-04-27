@@ -1,10 +1,10 @@
-﻿using GitHubSearchAPI.Interfaces;
+﻿using CustomerXAPI.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace GitHubSearchAPI.Services
+namespace CustomerXAPI.Services
 {
     public class JwtService : IJwtService
     {

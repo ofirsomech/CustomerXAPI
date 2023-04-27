@@ -1,7 +1,5 @@
 ﻿using CustomerXAPI.Interfaces;
 using CustomerXAPI.Services;
-using GitHubSearchAPI.Interfaces;
-using GitHubSearchAPI.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 public static class ServiceConfiguration

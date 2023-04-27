@@ -1,4 +1,4 @@
-﻿namespace GitHubSearchAPI.Dtos
+﻿namespace CustomerXAPI.Dtos
 {
     public class LoginDto
     {

@@ -1,4 +1,4 @@
-﻿namespace GitHubSearchAPI.Interfaces
+﻿namespace CustomerXAPI.Interfaces
 {
     public interface IJwtService
     {

@@ -1,6 +1,6 @@
-﻿using GitHubSearchAPI.Dtos;
+﻿using CustomerXAPI.Dtos;
 
-namespace GitHubSearchAPI.Interfaces
+namespace CustomerXAPI.Interfaces
 {
     public interface IAuthService
     {
