@@ -30,7 +30,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GitHubSearchAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerX API", Version = "v1" });
 
     // Add authentication to Swagger
     var securityScheme = new OpenApiSecurityScheme
@@ -62,7 +62,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
-
 
 ServiceConfiguration.Configure(builder.Services);
 
